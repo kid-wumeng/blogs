@@ -1,195 +1,192 @@
-22223333私人记录。有些事真是做一次抓狂一次，考虑到RN的不稳定性，也许哪次崩了就得迁移，为了到时不会手忙脚乱，特此记录！
+# 类型判断
 
-![Logo](images/logo.png)
+``Array.isArray``方法可以判断目标是否为数组：
 
-# [react-native-blur](https://github.com/react-native-community/react-native-blur)
-
-### Android
-
-1. 在 android/app/build.gradle 中配置：
-
+```js
+  var result = Array.isArray( [1, 2, 3] )
+  console.log(result)  // true
 ```
-android {
-  buildToolsVersion '23.0.3'
 
-  defaultConfig {
-    renderscriptTargetApi 23
-    renderscriptSupportModeEnabled true
+
+# 索引
+
+ES5标准中，``Array``对象终于加入了``indexOf``与``lastIndexOf``方法，它们能找出元素所在下标值。国际惯例，indexOf从前往后找，lastIndexOf从后往前找：
+
+```js
+  var array = ['a','b','c','d','a','b','c','d']
+  array.indexOf('c')      // -> 2
+  array.lastIndexOf('c')  // -> 6
+  array.indexOf('c', 5)      // -> 6，从array[5]的'a'开始往后找
+  array.lastIndexOf('c', 5)  // -> 2，从array[5]的'a'开始往前找
+```
+
+
+# 迭代
+
+``Array``还添加了一系列迭代方法，以适应越来越多的数据处理需求，它们包括``forEach``、``map``、``filter``、``every``、``some``、``reduce``、``reduceRight``。
+
+
+## forEach
+
+``forEach``遍历数组中每个元素，无返回值，是``for( var i = 0; i < array.length; i++ )``的简洁版，可读性更强：
+
+```js
+  var array = ['a','b','c','d','e']
+  array.forEach(function(value, index, array){
+    console.log('value: ' + value + ' | index: ' + index)
+  })
+
+  // -> value: a | index: 0
+  // -> value: b | index: 1
+  // -> value: c | index: 2
+  // -> value: d | index: 3
+  // -> value: e | index: 4
+```
+
+被迭代的数组会作为回调的第三个参数传入。
+
+还可以传入``thisObj``来绑定回调的``this``：
+
+```js
+  var array = ['a', 'b', 'c', 'd', 'e']
+  var thisObj = { name: 'kid' }
+  array.forEach(function(value){
+    console.log(this)
+  }, thisObj )
+
+  // -> Object { name: 'kid' }
+  // -> Object { name: 'kid' }
+  // -> Object { name: 'kid' }
+  // -> Object { name: 'kid' }
+  // -> Object { name: 'kid' }
+```
+
+所有这些新加入的迭代方法，都可以拿到``index``、``array``参数，也可以绑定``this``，所以之后不再赘述。
+
+
+## map
+
+``map``将数组映射为一个新数组：
+
+```js
+  var array = ['a','b','c','d','e']
+  var new_array = array.map(function(value){
+    return value + '!'
+  })
+
+  console.log(array)
+  // -> ['a','b','c','d','e']
+
+  console.log(new_array)
+  // -> ['a!','b!','c!','d!','e!']
+```
+
+最终会返回一个新数组，原数组保持不变。
+
+
+## filter
+
+``filter``设置关卡、过滤元素：
+
+```js
+  var array = ['a','b','c','d','e']
+  var new_array = array.filter(function(value){
+    if( value !== 'b' && value !== 'd' ){
+      // 返回true表示通关
+      return true
+    }
+  })
+
+  console.log(array)
+  // -> ['a','b','c','d','e']
+
+  console.log(new_array)
+  // -> ['a','c','e']
+```
+
+最终会返回一个新数组，由原数组中通关的元素构成。
+
+
+## every
+
+``every``类似“逻辑与”运算，用来判断所有元素是否都符合某个规则，只有每次迭代都返回``true``，``every``整体才返回``true``，比如检查数组中是否都为奇数：
+
+```js
+  function isOdd(value){
+    return value % 2 === 1
   }
-}
+
+  var result_1 = [1,3,5].every( isOdd )  // -> true
+  var result_2 = [1,3,6].every( isOdd )  // -> false
 ```
 
+注意，``every``从性能上考虑而支持逻辑短路，当发现某次迭代返回了``false``，就不会继续之后的迭代了。
 
 
-# [react-native-image-crop-picker](https://github.com/ivpusic/react-native-image-crop-picker)
+## some
 
-### iOS
+``some``类似“逻辑或”运算，只要至少有一次迭代返回``true``，那么``some``整体就返回``true``，比如我们想检查水果数组中是否包含苹果：
 
-1. 在 Info.plist 中配置：
-```
-<key>NSPhotoLibraryUsageDescription</key>
-<string>特特罗想访问你的相册喔 ~</string>
-```
-
-2. 将 node_modules/react-native-image-crop-picker/ios/ 中的 ImageCropPickerSDK 目录拖拽进项目，勾选 Copy items if needed
-
-3. 项目配置 -> General -> Deployment Info，Deployment Target 设为 8.0
-
-4. 项目配置 -> General -> Embedded Binaries，添加 RSKImageCropper.framework 与
- QBImagePicker.framework
-
-**imageCropPicker有BUG，必须采用以下非官方的额外配置**
-[详见这个issue中chuece的解决方案](https://github.com/ivpusic/react-native-image-crop-picker/issues/414)
-
-5. 将 node_modules/react-native-image-crop-picker/ios/ 中的 imageCropPicker.xcodeproj 拖拽进项目的 Libraries 目录（若已存在，则略过这步）
-
-6. 项目配置 -> General -> Linked frameworks and libraries，添加一项 libimageCropPicker.a
-
-7. 找到 Libraries/imageCropPicker.xcodeproj/ImageCropPicker.h
-将其中的：
-``#import "QBImagePickerController/QBImagePickerController.h"``
-改为：
-``#import "QBImagePicker/QBImagePickerController.h"``
-
-### Android
-
-1. 在 android/app/build.gradle 中配置：
-
-```
-android {
-  defaultConfig {
-    vectorDrawables.useSupportLibrary = true
+```js
+  function isApple(value){
+    return value === 'Apple'
   }
-}
+
+  var result_1 = ['Apple','Orange','Banana'].some( isApple )  // -> true
+  var result_2 = ['Lemon','Orange','Banana'].some( isApple )  // -> false
+```
+
+``some``也支持短路，比如在上面的例子中，第一个数组的首个元素就是``Apple``，那么仅仅将执行一次迭代。
+
+
+## reduce / reduceRight
+
+``reduce``对数组求值，从第二个元素（下标1）开始迭代，为了解释明白，我们先将回调的参数打印出来看看：
+
+```js
+  var array = ['a','b','c','d','e']
+  array.reduce(function( prev_return, value ){
+    console.log( prev_return, value )
+    return prev_return + value
+  })
+  // -> 'a b'
+  // -> 'ab c'
+  // -> 'abc d'
+  // -> 'abcd e'
+```
+
+其中，``prev_return``是上一次迭代的返回值，第一次迭代的``prev_return``为第一个元素``"a"``。
+
+如果你了解``MapReduce``算法的过程，那么就能理解``reduce``在收敛求值方面的作用，一个没什么实际价值的小例子：
+
+```js
+  var array = ['a','b','c','d','e']
+  var result = array.reduce(function( prev_return, value ){
+    return prev_return + value
+  })
+  console.log( result )  // -> 'abcde'
+```
+
+``reduceRight``则正好相反，从后向前迭代：
+
+```js
+var array = ['a','b','c','d','e']
+var result = array.reduceRight(function( prev_return, value ){
+  return prev_return + value
+})
+console.log(result)  // -> 'edcba'
+```
+
+我们还可以显式指定第一次迭代的``prev_return``值：
+
+```js
+var array = ['a','b','c','d','e']
+var result = array.reduce(function( prev_return, value ){
+  return prev_return + value
+}, 'word: ')
+console.log(result)  // -> 'word: abcde'
 ```
 
 
 
-# [react-native-push-notification](https://github.com/zo0r/react-native-push-notification)
-
-### iOS
-
-1. 将 node_modules/react-native/Libraries/PushNotificationIOS/ 中的 RCTPushNotification.xcodeproj 拖拽进项目的 Libraries 目录
-
-2. 项目配置 -> Build Phases -> Link Binary With Libraries，添加一项 libRCTPushNotification.a
-
-3. 在 AppDelegate.m 中添加代码：
-
-```
-#import <React/RCTPushNotificationManager.h>
-```
-
-以及：
-
-```
-// Required to register for notifications
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
-{
-  [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
-}
-// Required for the register event.
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-  [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-// Required for the notification event. You must call the completion handler after handling the remote notification.
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-  [RCTPushNotificationManager didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-}
-// Required for the registrationError event.
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-  [RCTPushNotificationManager didFailToRegisterForRemoteNotificationsWithError:error];
-}
-// Required for the localNotification event.
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-  [RCTPushNotificationManager didReceiveLocalNotification:notification];
-}
-```
-
-### Android
-
-1. 在 android/app/build.gradle 中配置：
-
-```
-dependencies {
-  compile project(':react-native-push-notification')
-  compile ('com.google.android.gms:play-services-gcm:8.1.0') {
-    force = true;
-  }
-}
-```
-
-2. 在 AndroidManifest.xml 中配置：
-
-```
-<uses-permission android:name="android.permission.WAKE_LOCK"/>
-<permission
-  android:name="${applicationId}.permission.C2D_MESSAGE"
-  android:protectionLevel="signature"
-/>
-<uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
-<uses-permission android:name="android.permission.VIBRATE"/>
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-```
-
-以及
-
-```
-<receiver
-  android:name="com.google.android.gms.gcm.GcmReceiver"
-  android:exported="true"
-  android:permission="com.google.android.c2dm.permission.SEND">
-  <intent-filter>
-    <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-    <category android:name="${applicationId}"/>
-  </intent-filter>
-</receiver>
-
-<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher"/>
-
-<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-  <intent-filter>
-    <action android:name="android.intent.action.BOOT_COMPLETED"/>
-  </intent-filter>
-</receiver>
-
-<service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-
-<service
-  android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-  android:exported="false">
-  <intent-filter>
-    <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-  </intent-filter>
-</service>
-```
-
-
-
-# [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
-
-### iOS
-
-1. 将 node_modules/react-native-vector-icons/Fonts/ 中需要的字体拖拽进 Resources 目录
-
-2. 在 Info.plist 的 Fonts provided by application 一项下配置字体，比如：
-
-### Android
-
-1. 将 node_modules/react-native-vector-icons/Fonts/ 中需要的字体复制到
- android/app/src/main/assets/fonts/ 目录
-
-
-
-# [react-native-webp](https://github.com/dbasedow/react-native-webp)
-
-### iOS
-
-1. 右键点击项目，通过 Add Files to ... 添加 node_modules/react-native-webp/ 中的 WebP.framework 与 WebPDemux.framework
-
-2. 项目配置 -> Build Settings -> Framework Search Path，添加一项：
-``$(SRCROOT)/../node_modules/react-native-webp``
+> 原创，自由转载，请署名，[本人博客 kid-wumeng.me](http://kid-wumeng.me)
