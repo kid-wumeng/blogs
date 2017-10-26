@@ -14,7 +14,7 @@ order: 11
 
 我们已经知道，可以通过以下方式创建一个 Vue 实例：
 
-``` js
+```js
 new Vue({
   el: '#some-element',
   // 选项
@@ -23,7 +23,7 @@ new Vue({
 
 要注册一个全局组件，可以使用 `Vue.component(tagName, options)`。例如：
 
-``` js
+```js
 Vue.component('my-component', {
   // 选项
 })
