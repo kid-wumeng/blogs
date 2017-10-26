@@ -176,8 +176,6 @@ dependencies {
 
 2. 在 Info.plist 的 Fonts provided by application 一项下配置字体，比如：
 
-![](https://cloud.githubusercontent.com/assets/378279/12421498/2db1f93a-be88-11e5-89c8-2e563ba6251a.png)
-
 ### Android
 
 1. 将 node_modules/react-native-vector-icons/Fonts/ 中需要的字体复制到
