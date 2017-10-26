@@ -14,7 +14,7 @@ order: 11
 
 我们已经知道，可以通过以下方式创建一个 Vue 实例：
 
-```js
+```javascript
 new Vue({
   el: '#some-element',
   // 选项
