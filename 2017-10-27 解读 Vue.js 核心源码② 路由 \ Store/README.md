@@ -3,8 +3,8 @@
 ``Array.isArray``方法可以判断目标是否为数组：
 
 ```js
-  var result = Array.isArray( [1, 2, 3] )
-  console.log(result)  // true
+var result = Array.isArray( [1, 2, 3] )
+console.log(result)  // true
 ```
 
 
@@ -13,11 +13,11 @@
 ES5标准中，``Array``对象终于加入了``indexOf``与``lastIndexOf``方法，它们能找出元素所在下标值。国际惯例，indexOf从前往后找，lastIndexOf从后往前找：
 
 ```js
-  var array = ['a','b','c','d','a','b','c','d']
-  array.indexOf('c')      // -> 2
-  array.lastIndexOf('c')  // -> 6
-  array.indexOf('c', 5)      // -> 6，从array[5]的'a'开始往后找
-  array.lastIndexOf('c', 5)  // -> 2，从array[5]的'a'开始往前找
+var array = ['a','b','c','d','a','b','c','d']
+array.indexOf('c')      // -> 2
+array.lastIndexOf('c')  // -> 6
+array.indexOf('c', 5)      // -> 6，从array[5]的'a'开始往后找
+array.lastIndexOf('c', 5)  // -> 2，从array[5]的'a'开始往前找
 ```
 
 
@@ -31,16 +31,16 @@ ES5标准中，``Array``对象终于加入了``indexOf``与``lastIndexOf``方法
 ``forEach``遍历数组中每个元素，无返回值，是``for( var i = 0; i < array.length; i++ )``的简洁版，可读性更强：
 
 ```js
-  var array = ['a','b','c','d','e']
-  array.forEach(function(value, index, array){
-    console.log('value: ' + value + ' | index: ' + index)
-  })
+var array = ['a','b','c','d','e']
+array.forEach(function(value, index, array){
+  console.log('value: ' + value + ' | index: ' + index)
+})
 
-  // -> value: a | index: 0
-  // -> value: b | index: 1
-  // -> value: c | index: 2
-  // -> value: d | index: 3
-  // -> value: e | index: 4
+// -> value: a | index: 0
+// -> value: b | index: 1
+// -> value: c | index: 2
+// -> value: d | index: 3
+// -> value: e | index: 4
 ```
 
 被迭代的数组会作为回调的第三个参数传入。
@@ -48,17 +48,17 @@ ES5标准中，``Array``对象终于加入了``indexOf``与``lastIndexOf``方法
 还可以传入``thisObj``来绑定回调的``this``：
 
 ```js
-  var array = ['a', 'b', 'c', 'd', 'e']
-  var thisObj = { name: 'kid' }
-  array.forEach(function(value){
-    console.log(this)
-  }, thisObj )
+var array = ['a', 'b', 'c', 'd', 'e']
+var thisObj = { name: 'kid' }
+array.forEach(function(value){
+  console.log(this)
+}, thisObj)
 
-  // -> Object { name: 'kid' }
-  // -> Object { name: 'kid' }
-  // -> Object { name: 'kid' }
-  // -> Object { name: 'kid' }
-  // -> Object { name: 'kid' }
+// -> Object { name: 'kid' }
+// -> Object { name: 'kid' }
+// -> Object { name: 'kid' }
+// -> Object { name: 'kid' }
+// -> Object { name: 'kid' }
 ```
 
 所有这些新加入的迭代方法，都可以拿到``index``、``array``参数，也可以绑定``this``，所以之后不再赘述。
