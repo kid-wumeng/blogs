@@ -1,6 +1,6 @@
 22223333私人记录。有些事真是做一次抓狂一次，考虑到RN的不稳定性，也许哪次崩了就得迁移，为了到时不会手忙脚乱，特此记录！
 
-![Logo](images/logo)
+![Logo](images/logo.png)
 
 # [react-native-blur](https://github.com/react-native-community/react-native-blur)
 
